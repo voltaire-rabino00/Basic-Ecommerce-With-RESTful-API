@@ -28,3 +28,24 @@ async function loadProducts() {
 }
 
 loadProducts();
+
+
+
+// Team Api Function
+    async function loadTeam() {
+        const res = await fetch("http://localhost:5000/api/team");
+        const team = await res.json();
+
+        const container = document.getElementById("teamContainer");
+        container.innerHTML = team.map(member => `
+            <div class="team-card">
+                <img src="${member.image}" alt="${member.name}">
+                <h3>${member.name}</h3>
+                <p class="role">${member.role}</p>
+                <p class="desc">${member.description}</p>
+                <p class="contact-info">✉ ${member.email}</p>
+            </div>
+        `).join("");
+    }
+
+    loadTeam();
