@@ -120,7 +120,7 @@ loadTeam();
 // =================== SLIDESHOW (FROM PRODUCTS API) ===================
 async function loadSlideshow() {
     try {
-        const response = await fetch("http://localhost:5000/api/products");
+        const response = await fetch("http://localhost:5000/api/featured");
         const products = await response.json();
 
         const slideshow = document.getElementById("slideshow");
@@ -150,6 +150,7 @@ function startSlideshow() {
 }
 
 loadSlideshow();
+
     
 
 // Team Api Function
@@ -170,3 +171,80 @@ loadSlideshow();
     }
 
     loadTeam();
+
+
+    // Load Product
+    async function loadProducts() {
+    try {
+        const response = await fetch("http://localhost:5000/api/products");
+        const products = await response.json();
+
+        const container = document.getElementById("product-list");
+        container.innerHTML = "";
+
+        products.forEach(product => {
+            container.innerHTML += `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <div class="price">₱${product.price}</div>
+
+                    <div class="product-buttons">
+                        <button class="add-cart" onclick="addToCart('${product._id}')">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('${product._id}')">Buy Now</button>
+                    </div>
+                </div>
+            `;
+        });
+
+    } catch (error) {
+        console.error("❌ Error loading products:", error);
+    }
+}
+
+loadProducts();
+
+// ===============================
+// ADD TO CART FUNCTION
+// ===============================
+async function addToCart(productId) {
+    try {
+        const res = await fetch("http://localhost:5000/api/cart", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId })
+        });
+
+        const data = await res.json();
+        alert("Added to cart!");
+
+        // update cart counter
+        document.getElementById("cartCount").innerText = data.cartCount;
+
+    } catch (error) {
+        console.error("❌ Add to cart error:", error);
+    }
+}
+
+// ===============================
+// BUY NOW FUNCTION
+// ===============================
+async function buyNow(productId) {
+    try {
+        const res = await fetch("http://localhost:5000/api/buy", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ productId })
+        });
+
+        const data = await res.json();
+        alert("Proceeding to checkout page...");
+
+        // OPTIONAL: redirect to a checkout page
+        // window.location.href = "/checkout.html?id=" + productId;
+
+    } catch (error) {
+        console.error("❌ Buy now error:", error);
+    }
+}

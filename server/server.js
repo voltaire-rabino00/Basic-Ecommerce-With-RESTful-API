@@ -24,8 +24,13 @@ app.use("/api/featured", featuredRoutes);
 const contactMessageRoutes = require("./routes/contactMessageRoutes");
 app.use("/api/contact-messages", contactMessageRoutes);
 
+// Add to Cart 
+const cartRoutes = require("./routes/cartRoutes");
+app.use("/api/cart", cartRoutes);
 
-
+// // Order Routes
+const orderRoutes = require("./routes/orderRoutes");
+app.use("/api/orders", orderRoutes);
 // Team Routes
 const teamRoutes = require("./routes/teamRoutes");
 app.use("/api/team", teamRoutes);
