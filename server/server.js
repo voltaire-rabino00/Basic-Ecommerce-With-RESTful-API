@@ -14,9 +14,17 @@ app.use(cors());
 const productRoutes = require("./routes/productRoutes");
 app.use("/api/products", productRoutes);
 
-// Contact Routes
-const contactRoutes = require("./routes/contactRoutes");
-app.use("/api/contacts", contactRoutes);
+// Featured Products
+const featuredRoutes = require("./routes/featuredRoutes");
+app.use("/api/featured", featuredRoutes);
+
+
+
+// Contact Message Routes
+const contactMessageRoutes = require("./routes/contactMessageRoutes");
+app.use("/api/contact-messages", contactMessageRoutes);
+
+
 
 // Team Routes
 const teamRoutes = require("./routes/teamRoutes");
