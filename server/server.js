@@ -19,18 +19,18 @@ const featuredRoutes = require("./routes/featuredRoutes");
 app.use("/api/featured", featuredRoutes);
 
 
-
 // Contact Message Routes
-const contactMessageRoutes = require("./routes/contactMessageRoutes");
-app.use("/api/contact-messages", contactMessageRoutes);
-
-// Add to Cart 
 const cartRoutes = require("./routes/cartRoutes");
 app.use("/api/cart", cartRoutes);
 
-// // Order Routes
-const orderRoutes = require("./routes/orderRoutes");
+// 
+const buyRoutes = require("./routes/buyRoutes");
+app.use("/api/buy", buyRoutes);
+
+
+const orderRoutes = require("./routes/buyRoutes");
 app.use("/api/orders", orderRoutes);
+
 // Team Routes
 const teamRoutes = require("./routes/teamRoutes");
 app.use("/api/team", teamRoutes);

@@ -1,14 +1,9 @@
 const mongoose = require("mongoose");
 
-const cartItemSchema = new mongoose.Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-  quantity: { type: Number, default: 1 }
+const CartSchema = new mongoose.Schema({
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+    quantity: { type: Number, default: 1 },
+    addedAt: { type: Date, default: Date.now }
 });
 
-const cartSchema = new mongoose.Schema({
-  items: [cartItemSchema],
-  sessionId: String, // optional: link to client session if you want
-  createdAt: { type: Date, default: Date.now }
-});
-
-module.exports = mongoose.model("Cart", cartSchema);
+module.exports = mongoose.model("Cart", CartSchema);
