@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Cart = require("../models/Cart");
-const Product = require("../models/product");
+const Product = require("../models/Product");
 
 // Create a new cart (optional) or add item to cart by cartId
 router.post("/", async (req, res) => {

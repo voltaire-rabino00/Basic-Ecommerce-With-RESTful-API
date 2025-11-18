@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
 const Cart = require("../models/Cart");
-const Product = require("../models/product");
+const Product = require("../models/Product");
 
 // Create order from cart (or direct buy): POST /api/orders { cartId } or { items: [...] , customer: {...} }
 router.post("/", async (req, res) => {
