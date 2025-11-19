@@ -26,6 +26,32 @@
 </section>
 
 
+<!-- =============================== -->
+<!-- CART MODAL -->
+<!-- =============================== -->
+<div id="cartModal" class="modal">
+  <div class="modal-content">
+    <span id="closeCart" class="close">&times;</span>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+  </div>
+</div>
+
+<!-- =============================== -->
+<!-- BUY NOW MODAL -->
+<!-- =============================== -->
+<div id="buyModal" class="modal">
+  <div class="modal-content">
+    <span id="closeBuy" class="close">&times;</span>
+
+    <h2 id="buyTitle"></h2>
+    <img id="buyImage" src="" width="160" style="border-radius:10px; margin:10px 0;">
+    <p id="buyDescription"></p>
+    <p style="font-size:1.2rem;"><b>₱<span id="buyPrice"></span></b></p>
+
+    <button id="confirmBuy" class="btn-primary">Confirm Purchase</button>
+  </div>
+</div>
 
 
 <script src="app.js"></script>

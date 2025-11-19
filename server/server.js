@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 
 
+
 dotenv.config();
 
 const app = express();
@@ -17,6 +18,9 @@ app.use("/api/products", productRoutes);
 // Featured Products
 const featuredRoutes = require("./routes/featuredRoutes");
 app.use("/api/featured", featuredRoutes);
+
+const contactMessageRoutes = require("./routes/contactMessageRoutes");
+app.use("/api/contact-messages", contactMessageRoutes);
 
 
 // Contact Message Routes
@@ -34,6 +38,13 @@ app.use("/api/orders", orderRoutes);
 // Team Routes
 const teamRoutes = require("./routes/teamRoutes");
 app.use("/api/team", teamRoutes);
+
+
+// image
+const path = require("path");
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
+
+
 
 
 // MongoDB connection

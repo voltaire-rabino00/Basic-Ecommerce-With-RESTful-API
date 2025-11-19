@@ -58,37 +58,38 @@ async function loadFeaturedProducts() {
 
 loadFeaturedProducts();
 
-// Contact
+
 // =================== CONTACT FORM SUBMIT ===================
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const message = document.getElementById("message").value.trim();
-  const responseMsg = document.getElementById("responseMessage");
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const message = document.getElementById("message").value.trim();
+    const responseMsg = document.getElementById("responseMessage");
+    
+    try {
+        const res = await fetch("http://localhost:5000/api/contact-messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, message })
+        });
 
-  try {
-    const res = await fetch("http://localhost:5000/api/contact-messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, message }),
-    });
+        const data = await res.json();
 
-    const data = await res.json();
+        if (res.ok) {
+            responseMsg.style.color = "green";
+            responseMsg.textContent = "Message sent!";
+            document.getElementById("contactForm").reset();
+        } else {
+            responseMsg.style.color = "red";
+            responseMsg.textContent = data.message || "Failed to send.";
+        }
 
-    if (res.ok) {
-      responseMsg.style.color = "green";
-      responseMsg.textContent = "Message sent!";
-      document.getElementById("contactForm").reset();
-    } else {
-      responseMsg.style.color = "red";
-      responseMsg.textContent = data.message || "Failed to send.";
+    } catch (error) {
+        responseMsg.style.color = "red";
+        responseMsg.textContent = "Server error.";
     }
-  } catch (error) {
-    responseMsg.style.color = "red";
-    responseMsg.textContent = "Server error.";
-  }
 });
 
 // =================== LOAD TEAM ===================
