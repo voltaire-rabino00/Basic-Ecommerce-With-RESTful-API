@@ -1,28 +1,44 @@
-const BASE_URL = "http://localhost:5000/api/products"; // ← palitan if needed
+// ===============================
+// BASE API URL FOR PRODUCTS
+// ===============================
+const BASE_URL = "http://localhost:5000/api/products"; 
+// ↑ Change this if your backend URL changes (prod, staging, etc.)
 
+// ===============================
+// LOAD ALL PRODUCTS
+// ===============================
 async function loadProducts() {
   try {
+    // Fetch products from backend
     const response = await fetch(BASE_URL);
     const products = await response.json();
 
+    // Get container where products will be rendered
     const container = document.getElementById("product-list");
-    container.innerHTML = "";
+    container.innerHTML = ""; // Clear existing content
 
+    // Loop through each product and create a card
     products.forEach((product) => {
       const card = document.createElement("div");
       card.classList.add("product-card");
 
+      // Product card structure
       card.innerHTML = `
         <img src="${product.image}" alt="${product.name}">
         <h3>${product.name}</h3>
         <p>${product.description}</p>
         <div class="price">₱${product.price}</div>
         <div class="product-buttons">
-          <button class="add-cart" onclick="addToCart('${product._id}')">Add to Cart</button>
-          <button class="buy-now" onclick="buyNow('${product._id}')">Buy Now</button>
+          <button class="add-cart" onclick="addToCart('${product._id}')">
+            Add to Cart
+          </button>
+          <button class="buy-now" onclick="buyNow('${product._id}')">
+            Buy Now
+          </button>
         </div>
       `;
 
+      // Append card to container
       container.appendChild(card);
     });
   } catch (error) {
@@ -30,69 +46,84 @@ async function loadProducts() {
   }
 }
 
+// Call function on page load
 loadProducts();
 
-// =================== LOAD FEATURED PRODUCTS ===================
+
+// ===============================
+// LOAD FEATURED PRODUCTS
+// ===============================
 async function loadFeaturedProducts() {
   try {
+    // Fetch featured products
     const response = await fetch("http://localhost:5000/api/featured");
     const products = await response.json();
 
     const container = document.getElementById("featuredList");
     container.innerHTML = "";
 
+    // Render featured products
     products.forEach((product) => {
       container.innerHTML += `
-                <div class="product-card">
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>${product.description}</p>
-                    <div class="price">₱${product.price}</div>
-                </div>
-            `;
+        <div class="product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>${product.description}</p>
+          <div class="price">₱${product.price}</div>
+        </div>
+      `;
     });
   } catch (error) {
     console.error("❌ Error loading featured products:", error);
   }
 }
 
+// Auto-load featured products
 loadFeaturedProducts();
 
 
-// =================== CONTACT FORM SUBMIT ===================
+// ===============================
+// CONTACT FORM SUBMISSION
+// ===============================
 document.getElementById("contactForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+  e.preventDefault(); // Prevent page reload
 
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const message = document.getElementById("message").value.trim();
-    const responseMsg = document.getElementById("responseMessage");
-    
-    try {
-        const res = await fetch("http://localhost:5000/api/contact-messages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email, message })
-        });
+  // Get input values
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const message = document.getElementById("message").value.trim();
+  const responseMsg = document.getElementById("responseMessage");
 
-        const data = await res.json();
+  try {
+    // Send form data to backend
+    const res = await fetch("http://localhost:5000/api/contact-messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, message })
+    });
 
-        if (res.ok) {
-            responseMsg.style.color = "green";
-            responseMsg.textContent = "Message sent!";
-            document.getElementById("contactForm").reset();
-        } else {
-            responseMsg.style.color = "red";
-            responseMsg.textContent = data.message || "Failed to send.";
-        }
+    const data = await res.json();
 
-    } catch (error) {
-        responseMsg.style.color = "red";
-        responseMsg.textContent = "Server error.";
+    // Handle response
+    if (res.ok) {
+      responseMsg.style.color = "green";
+      responseMsg.textContent = "Message sent!";
+      document.getElementById("contactForm").reset();
+    } else {
+      responseMsg.style.color = "red";
+      responseMsg.textContent = data.message || "Failed to send.";
     }
+
+  } catch (error) {
+    responseMsg.style.color = "red";
+    responseMsg.textContent = "Server error.";
+  }
 });
 
-// =================== LOAD TEAM ===================
+
+// ===============================
+// LOAD TEAM MEMBERS
+// ===============================
 async function loadTeam() {
   try {
     const res = await fetch("http://localhost:5000/api/team");
@@ -100,16 +131,17 @@ async function loadTeam() {
 
     const container = document.getElementById("teamContainer");
 
+    // Convert team array into HTML cards
     container.innerHTML = team
       .map(
         (member) => `
-            <div class="team-card">
-                <img src="${member.image}" alt="${member.name}">
-                <h3>${member.name}</h3>
-                <p class="role">${member.role}</p>
-                <p class="desc">${member.description}</p>
-                <p class="contact-info">✉ ${member.email}</p>
-            </div>
+          <div class="team-card">
+            <img src="${member.image}" alt="${member.name}">
+            <h3>${member.name}</h3>
+            <p class="role">${member.role}</p>
+            <p class="desc">${member.description}</p>
+            <p class="contact-info">✉ ${member.email}</p>
+          </div>
         `
       )
       .join("");
@@ -118,9 +150,13 @@ async function loadTeam() {
   }
 }
 
+// Auto-load team section
 loadTeam();
 
-// =================== SLIDESHOW (FROM PRODUCTS API) ===================
+
+// ===============================
+// SLIDESHOW (USING FEATURED PRODUCTS)
+// ===============================
 async function loadSlideshow() {
   try {
     const response = await fetch("http://localhost:5000/api/featured");
@@ -128,12 +164,14 @@ async function loadSlideshow() {
 
     const slideshow = document.getElementById("slideshow");
 
+    // Create slideshow slides
     slideshow.innerHTML = products
       .map(
         (p, index) => `
-            <div class="slide ${index === 0 ? "active" : ""}" 
-                style="background-image: url('${p.image}')">
-            </div>
+          <div 
+            class="slide ${index === 0 ? "active" : ""}" 
+            style="background-image: url('${p.image}')">
+          </div>
         `
       )
       .join("");
@@ -144,6 +182,7 @@ async function loadSlideshow() {
   }
 }
 
+// Controls slideshow animation
 function startSlideshow() {
   let index = 0;
   const slides = document.querySelectorAll(".slide");
@@ -152,33 +191,11 @@ function startSlideshow() {
     slides[index].classList.remove("active");
     index = (index + 1) % slides.length;
     slides[index].classList.add("active");
-  }, 3000);
+  }, 3000); // Change slide every 3 seconds
 }
 
+// Auto-start slideshow
 loadSlideshow();
-
-// Team Api Function
-async function loadTeam() {
-  const res = await fetch("http://localhost:5000/api/team");
-  const team = await res.json();
-
-  const container = document.getElementById("teamContainer");
-  container.innerHTML = team
-    .map(
-      (member) => `
-            <div class="team-card">
-                <img src="${member.image}" alt="${member.name}">
-                <h3>${member.name}</h3>
-                <p class="role">${member.role}</p>
-                <p class="desc">${member.description}</p>
-                <p class="contact-info">✉ ${member.email}</p>
-            </div>
-        `
-    )
-    .join("");
-}
-
-loadTeam();
 
 
 // ===============================
@@ -195,13 +212,17 @@ async function addToCart(productId) {
     const data = await res.json();
     alert("Added to cart!");
 
-    // update cart counter
+    // Update cart count in UI
     document.getElementById("cartCount").innerText = data.cartCount;
   } catch (error) {
     console.error("❌ Add to cart error:", error);
   }
 }
 
+
+// ===============================
+// BUY NOW FUNCTION
+// ===============================
 async function buyNow(productId) {
   try {
     const res = await fetch("http://localhost:5000/api/buy", {
@@ -210,10 +231,10 @@ async function buyNow(productId) {
       body: JSON.stringify({ productId }),
     });
 
-    const data = await res.json();
+    await res.json();
     alert("Proceeding to checkout page...");
 
-    // OPTIONAL: redirect to a checkout page
+    // Optional redirect
     // window.location.href = "/checkout.html?id=" + productId;
   } catch (error) {
     console.error("❌ Buy now error:", error);
